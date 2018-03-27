@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title Customer Site - Contact Page
+    %script{:type => "text/javascript", :src  => "/js/jquery-3.3.1.min.js"}
+    %script{:type => "text/javascript", :src  => "/js/webtracker.js"}
+  %body
+    #wrapper
+      #header
+        %h1 Customer Site Contact Form
+      #content
+        %form{ :action => "", :method => "post"}
+          %fieldset
+            %label{:for => "name"} Name:
+            %input{:type => "text", :name => "name", :class => "text"}
+            %label{:for => "mail"} E-mail:
+            %input{:type => "text", :name => "mail", :class => "text"}
+            %input{:type => "submit", :value => "Send", :class => "button"}
+
+      #footer
+        %p
+    :javascript
+      pageView();

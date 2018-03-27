@@ -1,0 +1,23 @@
+!!!
+%html
+  %head
+    %title Customer Site - Home Page
+    %script{:type => "text/javascript", :src  => "/js/jquery-3.3.1.min.js"}
+    %script{:type => "text/javascript", :src  => "/js/webtracker.js"}
+  %body
+    #wrapper
+      #header
+        %h1 Customer Site Home Page
+
+      #content
+        %p
+          Home Page content.
+        %p
+          %a{ :href => '/price' } Price Page
+        %p
+          %a{ :href => '/contact' } Contact Page
+
+      #footer
+        %p
+    :javascript
+      pageView();
