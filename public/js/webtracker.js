@@ -69,7 +69,7 @@ $(function() {
             });
             request.always(function(jqXHR) {
                 if (jqXHR.status === 201) {
-                    $('#form').trigger("reset");
+                    $(this).trigger("reset");
                 } else {
                     console.log(jqXHR.status + ' - ' + jqXHR.statusText);
                 }
