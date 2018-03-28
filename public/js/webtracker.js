@@ -1,79 +1,131 @@
 (function() {
-    pageView = function(clientId, clientKey, pageUrl) {
-        if (typeof (pageUrl) !== "string") {
-            pageUrl = window.location.href;
-        }
-        var tuid = trackerUid();
-        var dataJSON = JSON.stringify({
-            id : tuid,
-            url : pageUrl,
-            dtz : new Date().toISOString()
-        });
-        //console.log('data: ' + dataJSON);
-        var request = $.ajax({
-            url : "https://rdtracker-api.herokuapp.com/api/page/hit",
-            method : "post",
-            dataType : 'json',
-            contentType : "application/json; charset=utf-8",
-            data : dataJSON
-        });
-        request.always(function(jqXHR) {
-            if (jqXHR.status !== 201) {
-                console.log(jqXHR.status + ' - ' + jqXHR.statusText);
-            }
-        });
-    };
-    trackerUid = function() {
-        var tuid = undefined;
-        var cookieName = "tuid";
-        var cookies = document.cookie.split('; ');
-        console.log('cookies: ' + cookies);
-        for (var i = 0; i < cookies.length; i++) {
-            var cookieSplitted = cookies[i].split('=');
-            if (cookieName === cookieSplitted[0]) {
-                tuid = cookieSplitted[1];
-                break;
-            }
-        }
-        if (typeof tuid === 'undefined') {
-            tuid = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-            var cookieExpiration = new Date();
-            cookieExpiration.setFullYear(cookieExpiration.getFullYear() + 1);
-            var cookieString = cookieName + "=" + tuid + "; path/; expires=" + cookieExpiration.toGMTString();
-            //console.log('cookieString: ' + cookieString);
-            document.cookie = cookieString;
-        }
-        return tuid;
+  /* Send Page Hit to Tracker API */
+  trackPageView = function(clientKey, pageUrl) {
+      if (typeof (pageUrl) !== "string") {
+          pageUrl = window.location.href;
+      }
+      var tSessionId = tSessionIdGet();
+      var hitData = {
+          sid : tSessionId,
+          url : pageUrl,
+          dtz : new Date().toISOString()
+      };
+      var tUserId = tUserIdGet();
+      if(tUserId !== '') {
+        hitData['uid'] = tUserId;
+      }
+      postJsonData('/page/hit', JSON.stringify(hitData));
+  };
+
+  /* Send Form Data to Tracker API */
+  trackFormSubmit = function($form) {
+    // Serialize form data
+    var array = $form.serializeArray();
+    var formData = {};
+    $.each(array, function() {
+      formData[this.name] = this.value || '';
+    });
+    // Verify UserId
+    var emailAddress = formData['email'];
+    if (emailAddress !== '') {
+      var tUserId = tUserIdGet();
+      if(tUserId == emailAddress) {
+        console.log('Contact e-mail alredy on session: ' + emailAddress)
+        return;
+      }
+      tUserIdSet(emailAddress);
+      var jsonData = JSON.stringify(formData);
+      postJsonData('/contact', jsonData);
     }
+  }
+
+  /* Return Tracker Session Id (create if not exists) */
+  tSessionIdGet = function() {
+    var cookieName = "tsessionid";
+    var tUserId = tUserIdGet();
+    // create new Session Id
+    if (typeof tUserId === 'undefined') {
+      tUserIdSet('');
+    }
+    var cookieValue = cookieGet(cookieName);
+    if (typeof cookieValue === 'undefined') {
+      // create new Session Id
+      cookieValue = tSessionIdSet();
+    }
+    return cookieValue;
+  }
+  /* Set Tracker Session Id */
+  tSessionIdSet = function(val) {
+    var cookieName = "tsessionid";
+    var cookieValue = (typeof val === 'undefined' ) ? Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15) : val;
+    cookieSet(cookieName, cookieValue, (30*60));
+    return cookieValue;
+  }
+
+  /* Return Tracker User Id (undefined if not exists) */
+  tUserIdGet = function() {
+    return cookieGet("tuserid");
+  }
+  /* Set Tracker User Id */
+  tUserIdSet = function(val) {
+    var cookieValueOld = tUserIdGet();
+    var cookieName = "tuserid";
+    var cookieValue = (typeof val === 'undefined' ) ? '' : val;
+    //console.log('::' + cookieName + ' = ' + cookieValue);
+    cookieSet(cookieName, cookieValue);
+    if (cookieValueOld != '') {
+      tSessionIdSet();
+    }
+    return cookieValue;
+  }
+
+  /* Cookie Methods */
+  cookieGet = function(cookieName) {
+    var cookieValue = undefined;
+    if(typeof cookieName === 'string') {
+      var cookies = document.cookie ? document.cookie.split('; ') : [];
+      console.log('Cookies: ' + cookies);
+      for (var i = 0; i < cookies.length; i++) {
+        var parts = cookies[i].split('=');
+        if (cookieName === parts[0]) {
+          cookieValue = parts[1];
+          break;
+        }
+      }
+    }
+    //console.log('Cookie: ' + cookieName + ' = ' + cookieValue);
+    return cookieValue;
+  }
+  cookieSet = function(cookieName, cookieValue, cookieMaxAge) {
+    var cookieString = cookieName + "=" + cookieValue + "; path/";
+    if(typeof cookieMaxAge === 'number') {
+      cookieString = cookieString + "; max-age=" + cookieMaxAge;
+    }
+    //console.log('cookieString: ' + cookieString);
+    document.cookie = cookieString;
+  }
+  /* Send Data to Tracker API */
+  postJsonData = function(uri, json) {
+    console.log('Post uri:' + uri + ' data: ' + json);
+    return;
+    var request = $.ajax({
+      url : "https://rdtracker-api.herokuapp.com/api/" + uri,
+      method : "post",
+      dataType : 'json',
+      contentType : "application/json; charset=utf-8",
+      data : json
+    });
+    request.always(function(jqXHR) {
+      if (jqXHR.status !== 201) {
+          console.log(jqXHR.status + ' - ' + jqXHR.statusText);
+      }
+    });
+  }
 })();
 
 $(function() {
-    $("form").submit(function(event) {
-        event.preventDefault();
-        var array = $(this).serializeArray();
-        var dataJSON = {};
-        $.each(array, function() {
-            dataJSON[this.name] = this.value || '';
-        });
-        if (dataJSON['email'] !== '') {
-            var tuid = trackerUid();
-            dataJSON['tracker'] = tuid;
-            dataJSON = JSON.stringify(dataJSON);
-            //console.log('data: ' + dataJSON);
-            var request = $.ajax({
-                url : "https://rdtracker-api.herokuapp.com/api/contact",
-                method : "post",
-                dataType : 'json',
-                contentType : "application/json; charset=utf-8",
-                data : dataJSON
-            });
-            request.always(function(jqXHR) {
-                if (jqXHR.status === 201) {
-                    $("form").trigger("reset");
-                } else {
-                    console.log(jqXHR.status + ' - ' + jqXHR.statusText);
-                }
-            });
-        }
-    });
+  $("form").submit(function(event) {
+      event.preventDefault();
+      trackFormSubmit($(this));
+  });
 });
