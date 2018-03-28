@@ -1,23 +1,32 @@
 !!!
 %html
   %head
-    %title Customer Site - Contact Page
-    %script{:type => "text/javascript", :src  => "/js/jquery-3.3.1.min.js"}
-    %script{:type => "text/javascript", :src  => "/js/webtracker.js"}
+    %title Customer Site - Home Page
+    %link{:href => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css", :rel => :stylesheet}
   %body
-    #wrapper
-      #header
-        %h1 Customer Site Contact Form
-      #content
-        %form{ :action => "", :method => "post"}
-          %fieldset
-            %label{:for => "name"} Name:
-            %input{:type => "text", :name => "name", :class => "text"}
-            %label{:for => "mail"} E-mail:
-            %input{:type => "text", :name => "mail", :class => "text"}
-            %input{:type => "submit", :value => "Send", :class => "button"}
+    %nav{:class => 'navbar navbar-expand-lg navbar-light bg-light'}
+      %a{:href => '/', :class => 'navbar-brand'} Customer Site
+      %button{:type => "button", :class => "navbar-toggler", :data => {:toggle => 'collapse', :target => '#navbarNav'}, :aria => {:controls => 'navbarNav', :expanded => 'false', :label => 'Toggle navigation'}}
+        %span{:class => 'navbar-toggler-icon'}
+      %div{:id => 'navbarNav', :class => 'collapse navbar-collapse'}
+        %div{:class => 'navbar-nav'}
+          %a{:href => '/', :class => 'nav-item nav-link active'} Home
+          %a{:href => '/price', :class => 'nav-item nav-link'} Price
+          %a{:href => '#', :class => 'nav-item nav-link'}
+            Contact
+            %span{:class => 'sr-only'} (current)
+    %div{:class => 'container'}
+      %form{ :action => "", :method => "post"}
+        %div{:class => 'form-group'}
+          %label{:for => "name"} Name:
+          %input{:type => "text", :name => "name", :class => "form-control", :required => 'required'}
+        %div{:class => 'form-group'}
+          %label{:for => "mail"} E-mail Address:
+          %input{:type => "email", :name => "email", :class => "form-control", :required => 'required', :placeholder => 'name@example.com'}
+        %input{:type => "submit", :value => "Send", :class => "btn btn-primary"}
 
-      #footer
-        %p
+    %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}
+    %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"}
+    %script{:type => "text/javascript", :src => "/js/webtracker.js"}
     :javascript
       pageView();

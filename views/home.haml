@@ -2,22 +2,25 @@
 %html
   %head
     %title Customer Site - Home Page
-    %script{:type => "text/javascript", :src  => "/js/jquery-3.3.1.min.js"}
-    %script{:type => "text/javascript", :src  => "/js/webtracker.js"}
+    %link{:href => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css", :rel => :stylesheet}
   %body
-    #wrapper
-      #header
-        %h1 Customer Site Home Page
+    %nav{:class => 'navbar navbar-expand-lg navbar-light bg-light'}
+      %a{:href => '#', :class => 'navbar-brand'} Customer Site
+      %button{:type => "button", :class => "navbar-toggler", :data => {:toggle => 'collapse', :target => '#navbarNav'}, :aria => {:controls => 'navbarNav', :expanded => 'false', :label => 'Toggle navigation'}}
+        %span{:class => 'navbar-toggler-icon'}
+      %div{:id => 'navbarNav', :class => 'collapse navbar-collapse'}
+        %div{:class => 'navbar-nav'}
+          %a{:href => '#', :class => 'nav-item nav-link active'}
+            Home
+            %span{:class => 'sr-only'} (current)
+          %a{:href => '/price', :class => 'nav-item nav-link'} Price
+          %a{:href => '/contact', :class => 'nav-item nav-link'} Contact
+    %div{:class => 'container'}
+      %p
+        Home Page.
 
-      #content
-        %p
-          Home Page content.
-        %p
-          %a{ :href => '/price' } Price Page
-        %p
-          %a{ :href => '/contact' } Contact Page
-
-      #footer
-        %p
+    %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"}
+    %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"}
+    %script{:type => "text/javascript", :src => "/js/webtracker.js"}
     :javascript
       pageView();
