@@ -109,7 +109,7 @@
     console.log('Post path:' + path + ' data: ' + jsonData);
     //return;
     var uri = "https://rdtracker-api.herokuapp.com/api";
-    uri = "http://localhost:8080/api"
+    //uri = "http://localhost:8080/api"
     var request = $.ajax({
       url : uri + path,
       method : "post",
