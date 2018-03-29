@@ -11,7 +11,7 @@
       %div{:id => 'navbarNav', :class => 'collapse navbar-collapse'}
         %div{:class => 'navbar-nav'}
           %a{:href => '/', :class => 'nav-item nav-link active'} Home
-          %a{:href => '#', :class => 'nav-item nav-link'}
+          %a{:href => '/price', :class => 'nav-item nav-link'}
             Price
             %span{:class => 'sr-only'} (current)
           %a{:href => '/contact', :class => 'nav-item nav-link'} Contact
@@ -23,4 +23,4 @@
     %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"}
     %script{:type => "text/javascript", :src => "/js/webtracker.js"}
     :javascript
-      pageView();
+      trackPageView();

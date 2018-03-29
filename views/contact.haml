@@ -12,7 +12,7 @@
         %div{:class => 'navbar-nav'}
           %a{:href => '/', :class => 'nav-item nav-link active'} Home
           %a{:href => '/price', :class => 'nav-item nav-link'} Price
-          %a{:href => '#', :class => 'nav-item nav-link'}
+          %a{:href => '/contact', :class => 'nav-item nav-link'}
             Contact
             %span{:class => 'sr-only'} (current)
     %div{:class => 'container'}
@@ -29,4 +29,4 @@
     %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"}
     %script{:type => "text/javascript", :src => "/js/webtracker.js"}
     :javascript
-      pageView();
+      trackPageView();

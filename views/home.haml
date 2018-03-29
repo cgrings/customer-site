@@ -5,12 +5,12 @@
     %link{:href => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.min.css", :rel => :stylesheet}
   %body
     %nav{:class => 'navbar navbar-expand-lg navbar-light bg-light'}
-      %a{:href => '#', :class => 'navbar-brand'} Customer Site
+      %a{:href => '/', :class => 'navbar-brand'} Customer Site
       %button{:type => "button", :class => "navbar-toggler", :data => {:toggle => 'collapse', :target => '#navbarNav'}, :aria => {:controls => 'navbarNav', :expanded => 'false', :label => 'Toggle navigation'}}
         %span{:class => 'navbar-toggler-icon'}
       %div{:id => 'navbarNav', :class => 'collapse navbar-collapse'}
         %div{:class => 'navbar-nav'}
-          %a{:href => '#', :class => 'nav-item nav-link active'}
+          %a{:href => '/', :class => 'nav-item nav-link active'}
             Home
             %span{:class => 'sr-only'} (current)
           %a{:href => '/price', :class => 'nav-item nav-link'} Price
@@ -23,4 +23,4 @@
     %script{:type => "text/javascript", :src => "//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.min.js"}
     %script{:type => "text/javascript", :src => "/js/webtracker.js"}
     :javascript
-      pageView();
+      trackPageView();

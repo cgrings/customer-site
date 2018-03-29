@@ -4,17 +4,11 @@
       if (typeof (pageUrl) !== "string") {
           pageUrl = window.location.href;
       }
-      var tSessionId = tSessionIdGet();
       var hitData = {
-          sid : tSessionId,
           url : pageUrl,
           dtz : new Date().toISOString()
       };
-      var tUserId = tUserIdGet();
-      if(tUserId !== '') {
-        hitData['uid'] = tUserId;
-      }
-      postJsonData('/page/hit', JSON.stringify(hitData));
+      postJsonData('/page/hit', hitData);
   };
 
   /* Send Form Data to Tracker API */
@@ -30,12 +24,11 @@
     if (emailAddress !== '') {
       var tUserId = tUserIdGet();
       if(tUserId == emailAddress) {
-        console.log('Contact e-mail alredy on session: ' + emailAddress)
+        console.log('Tracker user-id already defined: ' + emailAddress)
         return;
       }
       tUserIdSet(emailAddress);
-      var jsonData = JSON.stringify(formData);
-      postJsonData('/contact', jsonData);
+      postJsonData('/contact', formData);
     }
   }
 
@@ -105,15 +98,24 @@
     document.cookie = cookieString;
   }
   /* Send Data to Tracker API */
-  postJsonData = function(uri, json) {
-    console.log('Post uri:' + uri + ' data: ' + json);
-    return;
+  postJsonData = function(path, rawData) {
+    var tSessionId = tSessionIdGet();
+    rawData['sid'] = tSessionId;
+    var tUserId = tUserIdGet();
+    if(tUserId !== '') {
+      rawData['uid'] = tUserId;
+    }
+    var jsonData = JSON.stringify(rawData);
+    console.log('Post path:' + path + ' data: ' + jsonData);
+    //return;
+    var uri = "https://rdtracker-api.herokuapp.com/api";
+    uri = "http://localhost:8080/api"
     var request = $.ajax({
-      url : "https://rdtracker-api.herokuapp.com/api/" + uri,
+      url : uri + path,
       method : "post",
       dataType : 'json',
       contentType : "application/json; charset=utf-8",
-      data : json
+      data : jsonData
     });
     request.always(function(jqXHR) {
       if (jqXHR.status !== 201) {
