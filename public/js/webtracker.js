@@ -77,7 +77,7 @@
     var cookieValue = undefined;
     if(typeof cookieName === 'string') {
       var cookies = document.cookie ? document.cookie.split('; ') : [];
-      console.log('Cookies: ' + cookies);
+      //console.log('Cookies: ' + cookies);
       for (var i = 0; i < cookies.length; i++) {
         var parts = cookies[i].split('=');
         if (cookieName === parts[0]) {
@@ -126,6 +126,7 @@
 })();
 
 $(function() {
+  trackPageView();
   $("form").submit(function(event) {
       event.preventDefault();
       trackFormSubmit($(this));

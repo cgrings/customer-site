@@ -14,4 +14,8 @@ class App < Sinatra::Base
     haml :contact, :format => :html5
   end
 
+  get "/about" do
+    haml :about, :format => :html5
+  end
+
 end
